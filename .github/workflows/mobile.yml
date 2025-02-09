@@ -52,7 +52,7 @@ jobs:
           dotnet build ./Claude -f net9.0-android -c Release
 
   Build_iOS:
-    runs-on: macos-14
+    runs-on: macos-15
 
     steps:
       - uses: actions/checkout@v4
@@ -80,7 +80,7 @@ jobs:
           dotnet build ./Claude -f net9.0-ios -c Release
 
   Build_MacCatalyst:
-    runs-on: macos-14
+    runs-on: macos-15
 
     steps:
       - uses: actions/checkout@v4
