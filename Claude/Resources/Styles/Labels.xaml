@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<?xaml-comp compile="true" ?>
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+    <!--#region Headline1-->
+    <!--#endregion-->
+
+    <!--#region Headline2-->
+    <Style
+        x:Key="txtHeadline2_1"
+        TargetType="Label">
+        <Setter Property="FontFamily" Value="NimbusRomanNo9L#400" />
+        <Setter Property="FontSize" Value="40" />
+        <Setter Property="TextColor" Value="{StaticResource text_tertiary_color}" />
+    </Style>
+    <!--#endregion-->
+
+    <!--#region Headline3-->
+    <!--#endregion-->
+
+    <!--#region Headline4-->
+    <!--#endregion-->
+
+    <!--#region Headline5-->
+    <!--#endregion-->
+
+    <!--#region Headline6-->
+    <Style
+        x:Key="txtHeadline6_1"
+        TargetType="Label">
+        <Setter Property="FontFamily" Value="Poppins#400" />
+        <Setter Property="FontSize" Value="20" />
+        <Setter Property="TextColor" Value="{StaticResource text_primary_color}" />
+    </Style>
+
+    <Style
+        x:Key="txtHeadline6_2"
+        TargetType="Label">
+        <Setter Property="FontFamily" Value="NimbusRomanNo9L#700" />
+        <Setter Property="FontSize" Value="20" />
+        <Setter Property="TextColor" Value="{StaticResource text_secondary_color}" />
+    </Style>
+
+    <Style
+        x:Key="txtHeadline6_3"
+        TargetType="Label">
+        <Setter Property="FontFamily" Value="NimbusRomanNo9L#400" />
+        <Setter Property="FontSize" Value="20" />
+        <Setter Property="TextColor" Value="{StaticResource text_quaternary_color}" />
+    </Style>
+    <!--#endregion-->
+
+    <!--#region Title-->
+    <Style
+        x:Key="txtTitle_1"
+        TargetType="Label">
+        <Setter Property="FontFamily" Value="Poppins#400" />
+        <Setter Property="FontSize" Value="18" />
+        <Setter Property="TextColor" Value="{StaticResource text_quinary_color}" />
+    </Style>
+    <!--#endregion-->
+
+    <!--#region Subtitle1-->
+    <!--#endregion-->
+
+    <!--#region Subtitle2-->
+    <Style
+        x:Key="txtSubtitle2_1"
+        TargetType="Label">
+        <Setter Property="FontFamily" Value="Poppins#600" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="TextColor" Value="{StaticResource text_senary_color}" />
+    </Style>
+
+    <Style
+        x:Key="txtSubtitle2_2"
+        TargetType="Label">
+        <Setter Property="FontFamily" Value="Poppins#400" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="TextColor" Value="{StaticResource text_tertiary_color}" />
+    </Style>
+    <!--#endregion-->
+
+    <!--#region Body1-->
+    <!--#endregion-->
+
+    <!--#region Body2-->
+    <!--#endregion-->
+
+    <!--#region Caption-->
+    <!--#endregion-->
+</ResourceDictionary>
