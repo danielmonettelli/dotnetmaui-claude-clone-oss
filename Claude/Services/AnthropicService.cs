@@ -27,7 +27,6 @@ public class AnthropicService : IAnthropicService
         // Required headers for Anthropic API as per documentation
         _httpClient.DefaultRequestHeaders.Add("x-api-key", ApiConstants.ANTHROPIC_API_KEY);
         _httpClient.DefaultRequestHeaders.Add("anthropic-version", "2023-06-01");
-        _httpClient.DefaultRequestHeaders.Add("content-type", "application/json");
 
         // Note: These JSON options are currently redundant since model properties use [JsonPropertyName] attributes.
         // However, they are kept for:
