@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Claude.Services;
+using Claude.ViewModels;
+using Microsoft.Extensions.Logging;
 
 namespace Claude
 {
@@ -16,6 +18,15 @@ namespace Claude
                     fonts.AddFont("NimbusRomNo9L-Reg.ttf", "NimbusRomanNo9L#400");
                     fonts.AddFont("NimbusRomNo9L-Bold.ttf", "NimbusRomanNo9L#700");
                 });
+
+            // Register HttpClient
+            builder.Services.AddHttpClient();
+
+            // Register services
+            builder.Services.AddSingleton<IAnthropicService, AnthropicService>();
+
+            // Register ViewModels
+            builder.Services.AddSingleton<ChatViewModel>();
 
 #if DEBUG
             builder.Logging.AddDebug();
