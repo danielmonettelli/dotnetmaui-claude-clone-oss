@@ -6,6 +6,12 @@ namespace Claude
 {
     public static class MauiProgram
     {
+        // Bandera para habilitar el modo de simulación
+        private static readonly bool UseSimulation = 
+            string.IsNullOrEmpty(Constants.ApiConstants.ANTHROPIC_API_KEY) || 
+            Constants.ApiConstants.ANTHROPIC_API_KEY == "CLAUDE_API_KEY_HERE" ||
+            Constants.ApiConstants.ANTHROPIC_API_KEY == "your_api_key_here";
+
         public static MauiApp CreateMauiApp()
         {
             var builder = MauiApp.CreateBuilder();
@@ -22,11 +28,36 @@ namespace Claude
             // Register HttpClient
             builder.Services.AddHttpClient();
 
-            // Register services
-            builder.Services.AddSingleton<IAnthropicService, AnthropicService>();
+            // Register factory and services
+            builder.Services.AddSingleton<AnthropicServiceFactory>();
+            
+            // Registrar el servicio adecuado según la configuración
+            builder.Services.AddSingleton<IAnthropicService>(sp => {
+                if (UseSimulation)
+                {
+                    return new SimulatedAnthropicService();
+                }
+                else
+                {
+                    var httpClientFactory = sp.GetRequiredService<IHttpClientFactory>();
+                    var httpClient = httpClientFactory.CreateClient();
+                    return new AnthropicService(httpClient);
+                }
+            });
 
-            // Register ViewModels
-            builder.Services.AddSingleton<ChatViewModel>();
+            // Register ViewModels with appropriate title based on simulation mode
+            builder.Services.AddSingleton<ChatViewModel>(sp => {
+                var service = sp.GetRequiredService<IAnthropicService>();
+                var viewModel = new ChatViewModel(service);
+                
+                // Cambiar el título si estamos en modo simulación
+                if (UseSimulation)
+                {
+                    viewModel.Title = "Claude (Modo Demo)";
+                }
+                
+                return viewModel;
+            });
 
 #if DEBUG
             builder.Logging.AddDebug();
