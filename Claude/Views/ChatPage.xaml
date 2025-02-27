@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Claude.Views.ChatPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:behaviors="clr-namespace:Claude.Behaviors"
+    xmlns:converter="clr-namespace:Claude.Converters"
+    xmlns:models="clr-namespace:Claude.Models"
+    xmlns:vm="clr-namespace:Claude.ViewModels"
+    Title="{Binding Title}"
+    x:DataType="vm:ChatViewModel"
+    BackgroundColor="{AppThemeBinding Light={StaticResource text_quaternary_color},
+                                      Dark={StaticResource text_quinary_color}}">
+
+    <ContentPage.Resources>
+        <converter:BoolToStyleConverter x:Key="BoolToStyleConverter" />
+        <converter:InvertedBoolConverter x:Key="InvertedBoolConverter" />
+        <Style
+            x:Key="ChatBubble"
+            TargetType="Border">
+            <Setter Property="Padding" Value="12,8" />
+            <Setter Property="StrokeShape" Value="RoundRectangle 12" />
+            <Setter Property="MaximumWidthRequest" Value="280" />
+        </Style>
+
+        <Style
+            x:Key="UserBubble"
+            BasedOn="{StaticResource ChatBubble}"
+            TargetType="Border">
+            <Setter Property="BackgroundColor" Value="{StaticResource text_primary_color}" />
+            <Setter Property="Margin" Value="40,4,8,4" />
+        </Style>
+
+        <Style
+            x:Key="AIBubble"
+            BasedOn="{StaticResource ChatBubble}"
+            TargetType="Border">
+            <Setter Property="BackgroundColor" Value="{StaticResource text_senary_color}" />
+            <Setter Property="Margin" Value="8,4,40,4" />
+        </Style>
+
+        <Style
+            x:Key="MessageText"
+            TargetType="Label">
+            <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource text_secondary_color}, Dark=White}" />
+            <Setter Property="LineBreakMode" Value="WordWrap" />
+        </Style>
+
+        <Style
+            x:Key="TimeStampText"
+            TargetType="Label">
+            <Setter Property="FontSize" Value="11" />
+            <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource text_tertiary_color}, Dark={StaticResource text_primary_color}}" />
+        </Style>
+
+        <!--  Estilo para indicar modo simulación  -->
+        <Style
+            x:Key="SimulationModeStyle"
+            TargetType="NavigationPage">
+            <Setter Property="BarBackgroundColor" Value="#FF7F50" />
+        </Style>
+    </ContentPage.Resources>
+
+    <!--  Behavior para detectar el modo simulación  -->
+    <ContentPage.Behaviors>
+        <behaviors:ConditionalStyleBehavior
+            PropertyName="Title"
+            Style="{StaticResource SimulationModeStyle}"
+            Value="Claude (Modo Demo)" />
+    </ContentPage.Behaviors>
+
+    <Grid
+        Padding="16"
+        RowDefinitions="*, Auto">
+        <!--  Messages List  -->
+        <CollectionView
+            Grid.Row="0"
+            ItemsSource="{Binding Messages}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="models:ChatMessageDisplay">
+                    <Border Style="{Binding IsUser, Converter={StaticResource BoolToStyleConverter}, ConverterParameter={StaticResource UserBubble}, FallbackValue={StaticResource AIBubble}}">
+                        <StackLayout Spacing="4">
+                            <Label
+                                Style="{StaticResource MessageText}"
+                                Text="{Binding Content}" />
+                            <Label
+                                HorizontalOptions="End"
+                                Style="{StaticResource TimeStampText}"
+                                Text="{Binding FormattedTime}" />
+                        </StackLayout>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <!--  Input Area  -->
+        <Grid
+            Grid.Row="1"
+            ColumnDefinitions="*, Auto, Auto"
+            ColumnSpacing="8"
+            RowSpacing="8">
+
+            <Border
+                Grid.Column="0"
+                BackgroundColor="{AppThemeBinding Light=White,
+                                                  Dark={StaticResource text_quinary_color}}"
+                StrokeShape="RoundRectangle 8">
+                <Entry
+                    Placeholder="Type your message..."
+                    PlaceholderColor="{AppThemeBinding Light={StaticResource text_tertiary_color},
+                                                       Dark={StaticResource text_quaternary_color}}"
+                    ReturnCommand="{Binding SendMessageCommand}"
+                    Text="{Binding UserMessage}"
+                    TextColor="{AppThemeBinding Light={StaticResource text_secondary_color},
+                                                Dark=White}" />
+            </Border>
+
+            <Button
+                Grid.Column="1"
+                BackgroundColor="{StaticResource text_primary_color}"
+                Command="{Binding SendMessageCommand}"
+                IsEnabled="{Binding IsBusy, Converter={StaticResource InvertedBoolConverter}}"
+                Text="Send" />
+
+            <Button
+                Grid.Column="2"
+                BackgroundColor="{StaticResource text_senary_color}"
+                Command="{Binding ClearChatCommand}"
+                Text="Clear" />
+        </Grid>
+    </Grid>
+</ContentPage>
