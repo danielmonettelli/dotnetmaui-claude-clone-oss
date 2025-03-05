@@ -12,7 +12,7 @@
         TargetType="Label">
         <Setter Property="FontFamily" Value="NimbusRomanNo9L#400" />
         <Setter Property="FontSize" Value="40" />
-        <Setter Property="TextColor" Value="{StaticResource text_tertiary_color}" />
+        <Setter Property="TextColor" Value="{StaticResource text_tertiary_color_light}" />
     </Style>
     <!--#endregion-->
 
@@ -31,7 +31,7 @@
         TargetType="Label">
         <Setter Property="FontFamily" Value="Poppins#400" />
         <Setter Property="FontSize" Value="20" />
-        <Setter Property="TextColor" Value="{StaticResource text_primary_color}" />
+        <Setter Property="TextColor" Value="{StaticResource text_primary_color_light}" />
     </Style>
 
     <Style
@@ -39,7 +39,7 @@
         TargetType="Label">
         <Setter Property="FontFamily" Value="NimbusRomanNo9L#700" />
         <Setter Property="FontSize" Value="20" />
-        <Setter Property="TextColor" Value="{StaticResource text_secondary_color}" />
+        <Setter Property="TextColor" Value="{StaticResource text_secondary_color_light}" />
     </Style>
 
     <Style
@@ -47,7 +47,7 @@
         TargetType="Label">
         <Setter Property="FontFamily" Value="NimbusRomanNo9L#400" />
         <Setter Property="FontSize" Value="20" />
-        <Setter Property="TextColor" Value="{StaticResource text_quaternary_color}" />
+        <Setter Property="TextColor" Value="{StaticResource text_quaternary_color_light}" />
     </Style>
 
     <Style
@@ -55,7 +55,7 @@
         TargetType="Label">
         <Setter Property="FontFamily" Value="NimbusRomanNo9L#400" />
         <Setter Property="FontSize" Value="22" />
-        <Setter Property="TextColor" Value="{StaticResource text_tertiary_color}" />
+        <Setter Property="TextColor" Value="{StaticResource text_tertiary_color_light}" />
     </Style>
 
     <Style
@@ -63,8 +63,8 @@
         TargetType="Entry">
         <Setter Property="FontFamily" Value="Poppins#400" />
         <Setter Property="FontSize" Value="20" />
-        <Setter Property="PlaceholderColor" Value="{StaticResource text_quinary_color}" />
-        <Setter Property="TextColor" Value="{StaticResource text_septenary_color}" />
+        <Setter Property="PlaceholderColor" Value="{StaticResource text_quinary_color_light}" />
+        <Setter Property="TextColor" Value="{StaticResource text_septenary_color_light}" />
     </Style>
     <!--#endregion-->
 
@@ -74,7 +74,7 @@
         TargetType="Label">
         <Setter Property="FontFamily" Value="Poppins#400" />
         <Setter Property="FontSize" Value="18" />
-        <Setter Property="TextColor" Value="{StaticResource text_quinary_color}" />
+        <Setter Property="TextColor" Value="{StaticResource text_quinary_color_light}" />
     </Style>
     <!--#endregion-->
 
@@ -84,7 +84,7 @@
         TargetType="Label">
         <Setter Property="FontFamily" Value="Poppins#400" />
         <Setter Property="FontSize" Value="16" />
-        <Setter Property="TextColor" Value="{StaticResource text_septenary_color}" />
+        <Setter Property="TextColor" Value="{StaticResource text_septenary_color_light}" />
     </Style>
     <!--#endregion-->
 
@@ -94,7 +94,7 @@
         TargetType="Label">
         <Setter Property="FontFamily" Value="Poppins#600" />
         <Setter Property="FontSize" Value="14" />
-        <Setter Property="TextColor" Value="{StaticResource text_senary_color}" />
+        <Setter Property="TextColor" Value="{StaticResource text_senary_color_light}" />
     </Style>
 
     <Style
@@ -102,7 +102,7 @@
         TargetType="Label">
         <Setter Property="FontFamily" Value="Poppins#400" />
         <Setter Property="FontSize" Value="14" />
-        <Setter Property="TextColor" Value="{StaticResource text_tertiary_color}" />
+        <Setter Property="TextColor" Value="{StaticResource text_tertiary_color_light}" />
     </Style>
 
     <Style
@@ -110,7 +110,7 @@
         TargetType="Label">
         <Setter Property="FontFamily" Value="Poppins#400" />
         <Setter Property="FontSize" Value="14" />
-        <Setter Property="TextColor" Value="{StaticResource text_septenary_color}" />
+        <Setter Property="TextColor" Value="{StaticResource text_septenary_color_light}" />
     </Style>
     <!--#endregion-->
 
