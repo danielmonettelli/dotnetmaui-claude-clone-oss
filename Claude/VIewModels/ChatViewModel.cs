@@ -1,9 +1,3 @@
-using Claude.Models;
-using Claude.Services;
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using System.Collections.ObjectModel;
-
 namespace Claude.ViewModels;
 
 public partial class ChatViewModel : BaseViewModel
@@ -19,7 +13,7 @@ public partial class ChatViewModel : BaseViewModel
     public ChatViewModel(IAnthropicService anthropicService)
     {
         _anthropicService = anthropicService;
-        _messages = new ObservableCollection<ChatMessageDisplay>();
+        _messages = [];
         Title = "Chat with Claude";
     }
 
@@ -27,10 +21,14 @@ public partial class ChatViewModel : BaseViewModel
     private async Task SendMessageAsync()
     {
         if (string.IsNullOrWhiteSpace(UserMessage))
+        {
             return;
+        }
 
         if (IsBusy)
+        {
             return;
+        }
 
         try
         {
@@ -38,7 +36,7 @@ public partial class ChatViewModel : BaseViewModel
             ClearError();
 
             // Add user message to the chat
-            var userMessageDisplay = new ChatMessageDisplay
+            ChatMessageDisplay userMessageDisplay = new()
             {
                 Content = UserMessage,
                 IsUser = true,
@@ -47,14 +45,14 @@ public partial class ChatViewModel : BaseViewModel
             Messages.Add(userMessageDisplay);
 
             // Clear input field
-            var messageToSend = UserMessage;
+            string messageToSend = UserMessage;
             UserMessage = string.Empty;
 
             // Get AI response
-            var response = await _anthropicService.SendChatMessageAsync(messageToSend);
+            string response = await _anthropicService.SendChatMessageAsync(messageToSend);
 
             // Add AI response to the chat
-            var aiMessageDisplay = new ChatMessageDisplay
+            ChatMessageDisplay aiMessageDisplay = new()
             {
                 Content = response,
                 IsUser = false,

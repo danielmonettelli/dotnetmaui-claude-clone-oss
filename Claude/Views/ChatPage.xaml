@@ -3,130 +3,255 @@
     x:Class="Claude.Views.ChatPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:behaviors="clr-namespace:Claude.Behaviors"
     xmlns:converter="clr-namespace:Claude.Converters"
-    xmlns:models="clr-namespace:Claude.Models"
+    xmlns:mct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:model="clr-namespace:Claude.Models"
     xmlns:vm="clr-namespace:Claude.ViewModels"
-    Title="{Binding Title}"
     x:DataType="vm:ChatViewModel"
-    BackgroundColor="{AppThemeBinding Light={StaticResource text_quaternary_color},
-                                      Dark={StaticResource text_quinary_color}}">
+    BackgroundColor="#f1eee7">
 
     <ContentPage.Resources>
-        <converter:BoolToStyleConverter x:Key="BoolToStyleConverter" />
         <converter:InvertedBoolConverter x:Key="InvertedBoolConverter" />
+
         <Style
-            x:Key="ChatBubble"
+            x:Key="ChatUserMessageStyle"
             TargetType="Border">
-            <Setter Property="Padding" Value="12,8" />
-            <Setter Property="StrokeShape" Value="RoundRectangle 12" />
-            <Setter Property="MaximumWidthRequest" Value="280" />
+            <Setter Property="StrokeShape" Value="RoundRectangle 16" />
+            <Setter Property="Padding" Value="17,10" />
+            <Setter Property="Margin" Value="12,0" />
+            <Setter Property="StrokeThickness" Value="1" />
+            <Setter Property="Stroke" Value="#d1cec5" />
+            <Setter Property="HorizontalOptions" Value="Start" />
+            <Setter Property="BackgroundColor" Value="#e8e5dc" />
         </Style>
 
         <Style
-            x:Key="UserBubble"
-            BasedOn="{StaticResource ChatBubble}"
+            x:Key="ChatAIMessageStyle"
             TargetType="Border">
-            <Setter Property="BackgroundColor" Value="{StaticResource text_primary_color}" />
-            <Setter Property="Margin" Value="40,4,8,4" />
+            <Setter Property="BackgroundColor" Value="Transparent" />
+            <Setter Property="Padding" Value="24,-6,24,4" />
+            <Setter Property="StrokeThickness" Value="0" />
         </Style>
 
-        <Style
-            x:Key="AIBubble"
-            BasedOn="{StaticResource ChatBubble}"
-            TargetType="Border">
-            <Setter Property="BackgroundColor" Value="{StaticResource text_senary_color}" />
-            <Setter Property="Margin" Value="8,4,40,4" />
-        </Style>
+        <converter:BoolToStyleConverter
+            x:Key="BoolToStyleConverterBorder"
+            FalseStyle="{StaticResource ChatAIMessageStyle}" />
 
-        <Style
-            x:Key="MessageText"
-            TargetType="Label">
-            <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource text_secondary_color}, Dark=White}" />
-            <Setter Property="LineBreakMode" Value="WordWrap" />
-        </Style>
-
-        <Style
-            x:Key="TimeStampText"
-            TargetType="Label">
-            <Setter Property="FontSize" Value="11" />
-            <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource text_tertiary_color}, Dark={StaticResource text_primary_color}}" />
-        </Style>
-
-        <!--  Estilo para indicar modo simulación  -->
-        <Style
-            x:Key="SimulationModeStyle"
-            TargetType="NavigationPage">
-            <Setter Property="BarBackgroundColor" Value="#FF7F50" />
-        </Style>
+        <converter:BoolToStyleConverter
+            x:Key="BoolToStyleConverterLabel"
+            FalseStyle="{StaticResource txtHeadline6_4_AI}" />
     </ContentPage.Resources>
 
-    <!--  Behavior para detectar el modo simulación  -->
-    <ContentPage.Behaviors>
-        <behaviors:ConditionalStyleBehavior
-            PropertyName="Title"
-            Style="{StaticResource SimulationModeStyle}"
-            Value="Claude (Modo Demo)" />
-    </ContentPage.Behaviors>
-
-    <Grid
-        Padding="16"
-        RowDefinitions="*, Auto">
-        <!--  Messages List  -->
-        <CollectionView
+    <Grid RowDefinitions="Auto, Auto, *, Auto">
+        <!--#region Barra de navegación personalizada-->
+        <Grid
             Grid.Row="0"
+            Padding="8,24,8,4"
+            ColumnDefinitions="Auto, *, Auto">
+            <HorizontalStackLayout Grid.Column="0">
+                <Border
+                    BackgroundColor="Transparent"
+                    HeightRequest="38"
+                    StrokeThickness="0"
+                    WidthRequest="38">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="24" />
+                    </Border.StrokeShape>
+                    <Border.Behaviors>
+                        <mct:TouchBehavior
+                            DefaultAnimationDuration="150"
+                            PressedBackgroundColor="#EBD5C7" />
+                    </Border.Behaviors>
+
+                    <Image
+                        HeightRequest="18"
+                        Source="icon_left_arrow.png"
+                        WidthRequest="18" />
+                </Border>
+
+                <Label
+                    Style="{StaticResource txtHeadline6_1}"
+                    Text="Chats"
+                    TranslationY="5" />
+            </HorizontalStackLayout>
+
+            <HorizontalStackLayout
+                Grid.Column="1"
+                HorizontalOptions="Center"
+                VerticalOptions="Center">
+                <Label
+                    Style="{StaticResource txtHeadline6_2}"
+                    Text="Claude " />
+
+                <Label
+                    Style="{StaticResource txtHeadline6_3}"
+                    Text="3.7 Sonnet" />
+            </HorizontalStackLayout>
+
+            <Border
+                Grid.Column="2"
+                BackgroundColor="Transparent"
+                HeightRequest="38"
+                StrokeThickness="0"
+                WidthRequest="38">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="24" />
+                </Border.StrokeShape>
+                <Border.Behaviors>
+                    <mct:TouchBehavior
+                        DefaultAnimationDuration="150"
+                        PressedBackgroundColor="#EBD5C7" />
+                </Border.Behaviors>
+
+                <Image
+                    HeightRequest="18"
+                    Source="icon_overflow_menu.png"
+                    WidthRequest="18" />
+            </Border>
+        </Grid>
+        <!--#endregion-->
+
+        <CollectionView
+            Grid.Row="1"
+            Grid.RowSpan="2"
             ItemsSource="{Binding Messages}">
+            <!--  Plantilla para cuando la colección está vacía  -->
+            <CollectionView.EmptyViewTemplate>
+                <DataTemplate>
+                    <Grid
+                        Padding="16,26,16,0"
+                        RowDefinitions="Auto, *, Auto, Auto, *">
+                        <Border
+                            Grid.Row="0"
+                            Padding="21,8"
+                            BackgroundColor="Transparent"
+                            Stroke="#e4e1da"
+                            StrokeThickness="1">
+                            <Border.Behaviors>
+                                <mct:TouchBehavior
+                                    DefaultAnimationDuration="150"
+                                    PressedBackgroundColor="#C7C4BB" />
+                            </Border.Behaviors>
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="4" />
+                            </Border.StrokeShape>
+                            <Grid ColumnDefinitions="Auto, *, Auto">
+                                <Label
+                                    Grid.Column="0"
+                                    Style="{StaticResource txtSubtitle2_2}"
+                                    Text="Get more with Claude Pro" />
+                                <Label
+                                    Grid.Column="2"
+                                    Style="{StaticResource txtSubtitle2_1}"
+                                    Text="Upgrade" />
+                            </Grid>
+                        </Border>
+
+                        <Image
+                            Grid.Row="2"
+                            HeightRequest="50"
+                            Source="icon_claude.png"
+                            WidthRequest="50" />
+                        <Label
+                            Grid.Row="3"
+                            HorizontalTextAlignment="Center"
+                            Style="{StaticResource txtHeadline2_1}"
+                            Text="How can I help you&#10;this morning?" />
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.EmptyViewTemplate>
             <CollectionView.ItemTemplate>
-                <DataTemplate x:DataType="models:ChatMessageDisplay">
-                    <Border Style="{Binding IsUser, Converter={StaticResource BoolToStyleConverter}, ConverterParameter={StaticResource UserBubble}, FallbackValue={StaticResource AIBubble}}">
-                        <StackLayout Spacing="4">
+                <DataTemplate x:DataType="model:ChatMessageDisplay">
+                    <VerticalStackLayout Padding="0,12,0,0">
+                        <Label
+                            Margin="24,0,0,0"
+                            IsVisible="{Binding IsUser}"
+                            Style="{StaticResource txtSubtitle2_3}"
+                            Text="Daniel" />
+                        <Border Style="{Binding IsUser, Converter={StaticResource BoolToStyleConverterBorder}, ConverterParameter={StaticResource ChatUserMessageStyle}}">
                             <Label
-                                Style="{StaticResource MessageText}"
+                                Style="{Binding IsUser, Converter={StaticResource BoolToStyleConverterLabel}, ConverterParameter={StaticResource txtSubtitle1_1_User}}"
                                 Text="{Binding Content}" />
-                            <Label
-                                HorizontalOptions="End"
-                                Style="{StaticResource TimeStampText}"
-                                Text="{Binding FormattedTime}" />
-                        </StackLayout>
-                    </Border>
+                        </Border>
+                    </VerticalStackLayout>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
 
-        <!--  Input Area  -->
-        <Grid
+        <Image
             Grid.Row="1"
-            ColumnDefinitions="*, Auto, Auto"
-            ColumnSpacing="8"
-            RowSpacing="8">
+            Aspect="AspectFill"
+            HeightRequest="16"
+            Source="transparent_text_mask.png" />
 
-            <Border
-                Grid.Column="0"
-                BackgroundColor="{AppThemeBinding Light=White,
-                                                  Dark={StaticResource text_quinary_color}}"
-                StrokeShape="RoundRectangle 8">
+        <!--#region Input Area-->
+        <Border
+            Grid.Row="3"
+            Padding="18,18,18,12"
+            BackgroundColor="White"
+            StrokeThickness="0">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="34,34,0,0" />
+            </Border.StrokeShape>
+
+            <Grid
+                RowDefinitions="Auto, Auto"
+                RowSpacing="11">
+
                 <Entry
-                    Placeholder="Type your message..."
-                    PlaceholderColor="{AppThemeBinding Light={StaticResource text_tertiary_color},
-                                                       Dark={StaticResource text_quaternary_color}}"
+                    Grid.Row="0"
+                    Placeholder="Chat with Claude..."
                     ReturnCommand="{Binding SendMessageCommand}"
-                    Text="{Binding UserMessage}"
-                    TextColor="{AppThemeBinding Light={StaticResource text_secondary_color},
-                                                Dark=White}" />
-            </Border>
+                    Style="{StaticResource txtHeadline6_5_entry}"
+                    Text="{Binding UserMessage}" />
 
-            <Button
-                Grid.Column="1"
-                BackgroundColor="{StaticResource text_primary_color}"
-                Command="{Binding SendMessageCommand}"
-                IsEnabled="{Binding IsBusy, Converter={StaticResource InvertedBoolConverter}}"
-                Text="Send" />
+                <Grid
+                    Grid.Row="1"
+                    ColumnDefinitions="Auto, *, Auto">
+                    <Border
+                        Grid.Column="0"
+                        BackgroundColor="#f1eee7"
+                        HeightRequest="37"
+                        StrokeThickness="0"
+                        WidthRequest="37">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="24" />
+                        </Border.StrokeShape>
+                        <Border.Behaviors>
+                            <mct:TouchBehavior
+                                DefaultAnimationDuration="150"
+                                PressedBackgroundColor="#BAB7AE" />
+                        </Border.Behaviors>
 
-            <Button
-                Grid.Column="2"
-                BackgroundColor="{StaticResource text_senary_color}"
-                Command="{Binding ClearChatCommand}"
-                Text="Clear" />
-        </Grid>
+                        <Image
+                            HeightRequest="22"
+                            Source="icon_add.png"
+                            WidthRequest="22" />
+                    </Border>
+
+                    <Border
+                        Grid.Column="2"
+                        BackgroundColor="#f2e1da"
+                        HeightRequest="37"
+                        StrokeThickness="0"
+                        WidthRequest="37">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="24" />
+                        </Border.StrokeShape>
+                        <Border.Behaviors>
+                            <mct:TouchBehavior
+                                DefaultAnimationDuration="150"
+                                PressedBackgroundColor="#BAB7AE" />
+                        </Border.Behaviors>
+
+                        <Image
+                            HeightRequest="27"
+                            Source="icon_microphone.png"
+                            WidthRequest="18" />
+                    </Border>
+                </Grid>
+            </Grid>
+        </Border>
     </Grid>
+    <!--#endregion-->
 </ContentPage>

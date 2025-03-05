@@ -1,8 +1,3 @@
-using Claude.Constants;
-using Claude.Models;
-using System.Net.Http.Json;
-using System.Text.Json;
-
 namespace Claude.Services;
 
 /// <summary>
@@ -49,20 +44,20 @@ public class AnthropicService : IAnthropicService
     /// <exception cref="InvalidOperationException">Thrown when unable to deserialize the response</exception>
     public async Task<string> SendChatMessageAsync(string query)
     {
-        var request = new AnthropicRequest
+        AnthropicRequest request = new()
         {
-            Messages = new List<ChatMessage>
-            {
+            Messages =
+            [
                 new() { Role = "user", Content = query }
-            }
+            ]
         };
 
-        var response = await _httpClient.PostAsJsonAsync(ApiConstants.MESSAGES_ENDPOINT, request, _jsonOptions);
+        HttpResponseMessage response = await _httpClient.PostAsJsonAsync(ApiConstants.MESSAGES_ENDPOINT, request, _jsonOptions);
 
         // If not successful, try to parse error response
         if (!response.IsSuccessStatusCode)
         {
-            var errorResponse = await response.Content.ReadFromJsonAsync<AnthropicErrorResponse>(_jsonOptions);
+            AnthropicErrorResponse? errorResponse = await response.Content.ReadFromJsonAsync<AnthropicErrorResponse>(_jsonOptions);
             if (errorResponse != null)
             {
                 throw new AnthropicException(
@@ -73,10 +68,10 @@ public class AnthropicService : IAnthropicService
             }
 
             // If we can't parse the error, throw with the status code
-            response.EnsureSuccessStatusCode();
+            _ = response.EnsureSuccessStatusCode();
         }
 
-        var result = await response.Content.ReadFromJsonAsync<AnthropicResponse>(_jsonOptions)
+        AnthropicResponse result = await response.Content.ReadFromJsonAsync<AnthropicResponse>(_jsonOptions)
                     ?? throw new InvalidOperationException("Failed to deserialize the response");
 
         return result.Content.FirstOrDefault()?.Text ?? string.Empty;

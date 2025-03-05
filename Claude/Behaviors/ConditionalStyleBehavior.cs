@@ -1,81 +1,78 @@
-using Microsoft.Maui.Controls;
-using System;
+namespace Claude.Behaviors;
 
-namespace Claude.Behaviors
+public class ConditionalStyleBehavior : Behavior<VisualElement>
 {
-    public class ConditionalStyleBehavior : Behavior<VisualElement>
+    public static readonly BindableProperty PropertyNameProperty =
+        BindableProperty.Create(nameof(PropertyName), typeof(string), typeof(ConditionalStyleBehavior), null);
+
+    public static readonly BindableProperty ValueProperty =
+        BindableProperty.Create(nameof(Value), typeof(object), typeof(ConditionalStyleBehavior), null);
+
+    public static readonly BindableProperty StyleProperty =
+        BindableProperty.Create(nameof(Style), typeof(Style), typeof(ConditionalStyleBehavior), null);
+
+    public string PropertyName
     {
-        public static readonly BindableProperty PropertyNameProperty =
-            BindableProperty.Create(nameof(PropertyName), typeof(string), typeof(ConditionalStyleBehavior), null);
+        get => (string)GetValue(PropertyNameProperty);
+        set => SetValue(PropertyNameProperty, value);
+    }
 
-        public static readonly BindableProperty ValueProperty =
-            BindableProperty.Create(nameof(Value), typeof(object), typeof(ConditionalStyleBehavior), null);
+    public object Value
+    {
+        get => GetValue(ValueProperty);
+        set => SetValue(ValueProperty, value);
+    }
 
-        public static readonly BindableProperty StyleProperty =
-            BindableProperty.Create(nameof(Style), typeof(Style), typeof(ConditionalStyleBehavior), null);
+    public Style Style
+    {
+        get => (Style)GetValue(StyleProperty);
+        set => SetValue(StyleProperty, value);
+    }
 
-        public string PropertyName
+    protected override void OnAttachedTo(VisualElement bindable)
+    {
+        base.OnAttachedTo(bindable);
+
+        // Monitor property changes
+        bindable.BindingContextChanged += OnBindingContextChanged;
+        UpdateStyle(bindable);
+    }
+
+    protected override void OnDetachingFrom(VisualElement bindable)
+    {
+        base.OnDetachingFrom(bindable);
+        bindable.BindingContextChanged -= OnBindingContextChanged;
+    }
+
+    private void OnBindingContextChanged(object sender, EventArgs e)
+    {
+        UpdateStyle((VisualElement)sender);
+    }
+
+    private void UpdateStyle(VisualElement element)
+    {
+        if (element.BindingContext == null || string.IsNullOrEmpty(PropertyName))
         {
-            get => (string)GetValue(PropertyNameProperty);
-            set => SetValue(PropertyNameProperty, value);
+            return;
         }
 
-        public object Value
+        // Get the property value using reflection
+        System.Reflection.PropertyInfo? propertyInfo = element.BindingContext.GetType().GetProperty(PropertyName);
+        if (propertyInfo != null)
         {
-            get => GetValue(ValueProperty);
-            set => SetValue(ValueProperty, value);
-        }
+            object? propertyValue = propertyInfo.GetValue(element.BindingContext);
 
-        public Style Style
-        {
-            get => (Style)GetValue(StyleProperty);
-            set => SetValue(StyleProperty, value);
-        }
-
-        protected override void OnAttachedTo(VisualElement bindable)
-        {
-            base.OnAttachedTo(bindable);
-            
-            // Monitor property changes
-            bindable.BindingContextChanged += OnBindingContextChanged;
-            UpdateStyle(bindable);
-        }
-
-        protected override void OnDetachingFrom(VisualElement bindable)
-        {
-            base.OnDetachingFrom(bindable);
-            bindable.BindingContextChanged -= OnBindingContextChanged;
-        }
-
-        private void OnBindingContextChanged(object sender, EventArgs e)
-        {
-            UpdateStyle((VisualElement)sender);
-        }
-
-        private void UpdateStyle(VisualElement element)
-        {
-            if (element.BindingContext == null || string.IsNullOrEmpty(PropertyName))
-                return;
-
-            // Get the property value using reflection
-            var propertyInfo = element.BindingContext.GetType().GetProperty(PropertyName);
-            if (propertyInfo != null)
+            // Apply style if values match
+            if ((propertyValue != null && propertyValue.Equals(Value)) ||
+                (propertyValue == null && Value == null))
             {
-                var propertyValue = propertyInfo.GetValue(element.BindingContext);
-                
-                // Apply style if values match
-                if ((propertyValue != null && propertyValue.Equals(Value)) ||
-                    (propertyValue == null && Value == null))
+                if (element.Parent is VisualElement parent && Style != null)
                 {
-                    var parent = element.Parent as VisualElement;
-                    if (parent != null && Style != null)
+                    // Apply style to parent (NavigationPage)
+                    foreach (Setter? setter in Style.Setters)
                     {
-                        // Apply style to parent (NavigationPage)
-                        foreach (var setter in Style.Setters)
-                        {
-                            var targetProperty = setter.Property;
-                            parent.SetValue(targetProperty, setter.Value);
-                        }
+                        BindableProperty targetProperty = setter.Property;
+                        parent.SetValue(targetProperty, setter.Value);
                     }
                 }
             }

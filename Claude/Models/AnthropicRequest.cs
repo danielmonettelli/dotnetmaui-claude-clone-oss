@@ -1,5 +1,3 @@
-using System.Text.Json.Serialization;
-
 namespace Claude.Models;
 
 /// <summary>
@@ -37,5 +35,5 @@ public class AnthropicRequest
     /// Each message contains a role (e.g., "user") and content.
     /// </summary>
     [JsonPropertyName("messages")]
-    public List<ChatMessage> Messages { get; set; } = new();
+    public List<ChatMessage> Messages { get; set; } = [];
 }

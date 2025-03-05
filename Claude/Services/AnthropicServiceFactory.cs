@@ -1,5 +1,3 @@
-using Claude.Constants;
-
 namespace Claude.Services
 {
     public class AnthropicServiceFactory
@@ -19,7 +17,7 @@ namespace Claude.Services
             }
             else
             {
-                var httpClient = _httpClientFactory.CreateClient();
+                HttpClient httpClient = _httpClientFactory.CreateClient();
                 return new AnthropicService(httpClient);
             }
         }

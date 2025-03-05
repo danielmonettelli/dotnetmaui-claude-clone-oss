@@ -1,5 +1,3 @@
-using System.Text.Json.Serialization;
-
 namespace Claude.Models;
 
 /// <summary>
@@ -41,7 +39,7 @@ public class AnthropicResponse
     /// The list of content blocks in the response, containing the actual message content
     /// </summary>
     [JsonPropertyName("content")]
-    public List<MessageContent> Content { get; set; } = new();
+    public List<MessageContent> Content { get; set; } = [];
 
     /// <summary>
     /// The model used to generate this response (e.g., "claude-3-5-sonnet-20241022")

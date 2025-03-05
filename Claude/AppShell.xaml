@@ -3,19 +3,14 @@
     x:Class="Claude.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:Claude"
     xmlns:view="clr-namespace:Claude.Views"
-    Shell.FlyoutBehavior="Flyout"
-    Title="Claude">
+    Title="Claude"
+    Shell.FlyoutBehavior="Disabled">
 
     <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
-
-        <ShellContent
-            Title="ChatPage"
-            ContentTemplate="{DataTemplate view:ChatPage}"
-            Route="ChatPage" />
+        Title="ChatPage"
+        ContentTemplate="{DataTemplate view:ChatPage}"
+        Route="ChatPage"
+        Shell.NavBarIsVisible="False" />
 
 </Shell>

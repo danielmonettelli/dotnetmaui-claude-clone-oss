@@ -1,0 +1,13 @@
+﻿global using Claude.Constants;
+global using Claude.Models;
+global using Claude.Services;
+global using Claude.ViewModels;
+global using CommunityToolkit.Maui;
+global using CommunityToolkit.Mvvm.ComponentModel;
+global using CommunityToolkit.Mvvm.Input;
+global using Microsoft.Extensions.Logging;
+global using System.Collections.ObjectModel;
+global using System.Globalization;
+global using System.Net.Http.Json;
+global using System.Text.Json;
+global using System.Text.Json.Serialization;
